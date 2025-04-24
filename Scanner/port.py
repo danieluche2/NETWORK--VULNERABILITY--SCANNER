@@ -1,7 +1,7 @@
 import socket
 import concurrent.futures
 from typing import List, Dict, Optional
-from config import SCAN_TIMEOUT, COMMON_PORTS
+from .config import SCAN_TIMEOUT, COMMON_PORTS
 
 class PortScanner:
     def __init__(self, timeout: float = SCAN_TIMEOUT):
@@ -136,7 +136,7 @@ class PortScanner:
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
             future_to_port = {executor.submit(self.scan_port, ip, port): port for port in ports}
             
-            for future in concurrent.future_to_port.as_completed(future_to_port):
+            for future in concurrent.futures.as_completed(future_to_port):
                 port = future_to_port[future]
                 try:
                     result = future.result()
